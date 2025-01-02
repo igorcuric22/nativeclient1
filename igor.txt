@@ -1,0 +1,1834 @@
+// import { StatusBar } from 'expo-status-bar';
+// import { StyleSheet, Text, View } from 'react-native';
+
+// export default function App() {
+//   return (
+//     <View style={styles.container}>
+//       <Text>Open up App.js to start working on your app! uuuuuux</Text>
+//       <StatusBar style="auto" />
+//     </View>
+//   );
+// }
+
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     backgroundColor: '#fff',
+//     alignItems: 'center',
+//     justifyContent: 'center',
+//   },
+// });
+
+import React from 'react';
+import { View, Image, StyleSheet } from 'react-native';
+
+const App = () => {
+  return (
+    <View style={styles.container}>
+      <Image
+        style={styles.image}
+        // source={require('./543_1000.webp')} // Local image path
+        // or for local images use: source={require('./path-to-your-local-image.jpg')}
+      />
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  image: {
+    width: 200,
+    height: 200,
+    resizeMode: 'cover', // or 'contain', 'stretch', etc.
+  },
+});
+
+export default App;
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+import React, { useState } from 'react';
+import { View, Image, StyleSheet, Modal, TouchableOpacity } from 'react-native';
+
+const App = () => {
+  const [isModalVisible, setModalVisible] = useState(false);
+
+  // Toggle the modal visibility
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible);
+  };
+
+  return (
+    <View style={styles.container}>
+      {/* Touchable image */}
+      <TouchableOpacity onPress={toggleModal}>
+        <Image
+          style={styles.image}
+          source={{ uri: 'https://example.com/your-image.jpg' }} // Replace with your image URL or require for local images
+        />
+      </TouchableOpacity>
+
+      {/* Fullscreen image in a Modal */}
+      <Modal
+        visible={isModalVisible}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={toggleModal} // Close the modal on back press (Android)
+      >
+        <TouchableOpacity style={styles.modalContainer} onPress={toggleModal}>
+          <Image
+            style={styles.fullScreenImage}
+            source={{ uri: 'https://example.com/your-image.jpg' }} // Replace with the same or another image URL
+          />
+        </TouchableOpacity>
+      </Modal>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  image: {
+    width: 200,
+    height: 200,
+    resizeMode: 'cover',
+  },
+  modalContainer: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.8)', // Semi-transparent background
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  fullScreenImage: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'contain', // Ensures the image is not distorted
+  },
+});
+
+export default App;
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+import React, { useState } from 'react';
+import { View, Image, StyleSheet, Modal, TouchableOpacity } from 'react-native';
+
+const App = () => {
+  const [isModalVisible, setModalVisible] = useState(false);
+
+  // Toggle the modal visibility
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible);
+  };
+
+  return (
+    <View style={styles.container}>
+      {/* Touchable image */}
+      <TouchableOpacity onPress={toggleModal}>
+        <Image
+          style={styles.image}
+          source={require('./assets/favicon.png')} // Replace with your image URL or require for local images
+        />
+      </TouchableOpacity>
+
+      {/* Fullscreen image in a Modal */}
+      <Modal
+        visible={isModalVisible}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={toggleModal} // Close the modal on back press (Android)
+      >
+        <TouchableOpacity style={styles.modalContainer} onPress={toggleModal}>
+          <Image
+            style={styles.fullScreenImage}
+            source={require('./assets/favicon.png')}// Replace with the same or another image URL
+          />
+        </TouchableOpacity>
+      </Modal>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  image: {
+    width: 200,
+    height: 200,
+    resizeMode: 'cover',
+  },
+  modalContainer: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.8)', // Semi-transparent background
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  fullScreenImage: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'contain', // Ensures the image is not distorted
+  },
+});
+
+export default App;
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+import React, { useState } from 'react';
+import { View, Image, StyleSheet, Modal, TouchableOpacity, FlatList } from 'react-native';
+
+const images = [
+  require('./assets/image1.jpg'), // Replace with your local images
+  require('./assets/image2.jpg'),
+  require('./assets/image3.jpg'),
+  require('./assets/image4.jpg'),
+  // Add more images as needed
+];
+
+const App = () => {
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const openModal = (index) => {
+    setCurrentIndex(index);
+    setModalVisible(true);
+  };
+
+  const closeModal = () => {
+    setModalVisible(false);
+  };
+
+  const renderThumbnail = ({ item, index }) => (
+    <TouchableOpacity onPress={() => openModal(index)}>
+      <Image style={styles.imageThumbnail} source={item} />
+    </TouchableOpacity>
+  );
+
+  const renderFullScreenImage = ({ item }) => (
+    <View style={styles.fullScreenContainer}>
+      <Image style={styles.fullScreenImage} source={item} />
+    </View>
+  );
+
+  return (
+    <View style={styles.container}>
+      {/* Image grid using FlatList */}
+      <FlatList
+        data={images}
+        renderItem={renderThumbnail}
+        keyExtractor={(item, index) => index.toString()}
+        numColumns={2} // Adjust for grid columns
+        contentContainerStyle={styles.grid}
+      />
+
+      {/* Fullscreen image with swiping in a Modal */}
+      <Modal
+        visible={isModalVisible}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={closeModal}
+      >
+        <TouchableOpacity style={styles.modalBackground} onPress={closeModal}>
+          <FlatList
+            data={images}
+            renderItem={renderFullScreenImage}
+            keyExtractor={(item, index) => index.toString()}
+            horizontal
+            pagingEnabled
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.fullScreenFlatList}
+            initialScrollIndex={currentIndex}
+            onScrollToIndexFailed={(error) => {
+              console.warn(error); // Handles edge case where index may be out of range
+            }}
+          />
+        </TouchableOpacity>
+      </Modal>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  grid: {
+    paddingVertical: 20,
+  },
+  imageThumbnail: {
+    width: 150,
+    height: 150,
+    margin: 10,
+    resizeMode: 'cover',
+  },
+  modalBackground: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  fullScreenFlatList: {
+    flexGrow: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  fullScreenContainer: {
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  fullScreenImage: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'contain',
+  },
+});
+
+export default App;
+
+////////////////////////////////////////////////////////////////////////////////////////
+
+import React, { useState } from 'react';
+import { View, Image, StyleSheet, Modal, TouchableOpacity, FlatList } from 'react-native';
+
+const images = [
+  require('./assets/images/top1.png'),
+  require('./assets/images/top2.png'),
+  require('./assets/images/top3.png'),
+  require('./assets/images/top4.png'),
+  require('./assets/images/top5.png'),
+];
+
+
+const App = () => {
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [currentImage, setCurrentImage] = useState(null);
+
+  const openModal = (image) => {
+    setCurrentImage(image);
+    setModalVisible(true);
+  };
+
+  const closeModal = () => {
+    setModalVisible(false);
+    setCurrentImage(null);
+  };
+
+  const renderItem = ({ item }) => (
+    <TouchableOpacity onPress={() => openModal(item)}>
+      <Image style={styles.imageThumbnail} source={item} />
+    </TouchableOpacity>
+  );
+
+  return (
+    <View style={styles.container}>
+      {/* Image grid using FlatList */}
+      <FlatList
+        data={images}
+        renderItem={renderItem}
+        keyExtractor={(item, index) => index.toString()}
+        numColumns={2} // Adjust for grid columns
+        contentContainerStyle={styles.grid}
+      />
+
+      {/* Fullscreen image in a Modal */}
+      <Modal
+        visible={isModalVisible}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={closeModal}
+      >
+        <TouchableOpacity style={styles.modalContainer} onPress={closeModal}>
+          <Image style={styles.fullScreenImage} source={currentImage} />
+        </TouchableOpacity>
+      </Modal>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  grid: {
+    paddingVertical: 20,
+  },
+  imageThumbnail: {
+    width: 150,
+    height: 150,
+    margin: 10,
+    resizeMode: 'cover',
+  },
+  modalContainer: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  fullScreenImage: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'contain',
+  },
+});
+
+export default App;
+
+////////////////////////////////////////////////////////////////////////////////////////////
+
+import React, { useState } from 'react';
+import { View, Image, StyleSheet, Modal, TouchableOpacity, FlatList, Text } from 'react-native';
+
+const images = [
+  require('./assets/image1.jpg'), // Replace with your local images
+  require('./assets/image2.jpg'),
+  require('./assets/image3.jpg'),
+  require('./assets/image4.jpg'),
+  // Add more images as needed
+];
+
+const App = () => {
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [currentImage, setCurrentImage] = useState(null);
+
+  const openModal = (image) => {
+    setCurrentImage(image);
+    setModalVisible(true);
+  };
+
+  const closeModal = () => {
+    setModalVisible(false);
+    setCurrentImage(null);
+  };
+
+  const renderItem = ({ item }) => (
+    <TouchableOpacity onPress={() => openModal(item)}>
+      <Image style={styles.imageThumbnail} source={item} />
+    </TouchableOpacity>
+  );
+
+  return (
+    <View style={styles.container}>
+      {/* Image grid using FlatList */}
+      <FlatList
+        data={images}
+        renderItem={renderItem}
+        keyExtractor={(item, index) => index.toString()}
+        numColumns={2} // Adjust for grid columns
+        contentContainerStyle={styles.grid}
+      />
+
+      {/* Fullscreen image in a Modal */}
+      <Modal
+        visible={isModalVisible}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={closeModal}
+      >
+        <View style={styles.modalContainer}>
+          {/* Fullscreen Image */}
+          <Image style={styles.fullScreenImage} source={currentImage} />
+
+          {/* Close Button */}
+          <TouchableOpacity style={styles.closeButton} onPress={closeModal}>
+            <Text style={styles.closeButtonText}>Close</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  grid: {
+    paddingVertical: 20,
+  },
+  imageThumbnail: {
+    width: 150,
+    height: 150,
+    margin: 10,
+    resizeMode: 'cover',
+  },
+  modalContainer: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  fullScreenImage: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'contain',
+  },
+  closeButton: {
+    position: 'absolute',
+    bottom: 40, // Position button at the bottom
+    backgroundColor: 'rgba(0, 0, 0, 0.6)', // Semi-transparent background
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+  },
+  closeButtonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+});
+
+export default App;
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+
+import React from 'react';
+import { Button, Image, View, StyleSheet } from 'react-native';
+import { launchImageLibrary } from 'react-native-image-picker';
+
+const App = () => {
+  const [fileUri, setFileUri] = React.useState(null);
+
+  const handleFile = () => {
+    const options = {
+      mediaType: 'photo', // 'photo' or 'video' based on what you want
+      includeBase64: true,
+    };
+
+    launchImageLibrary(options, (response) => {
+      if (response.didCancel) {
+        console.log("User canceled image picker");
+      } else if (response.errorCode) {
+        console.error("ImagePicker Error:", response.errorMessage);
+      } else {
+        const uri = response.assets[0].uri; // Get URI of selected file
+        setFileUri(uri);
+      }
+    });
+  };
+
+  return (
+    <View style={styles.container}>
+      <Button title="Select File" onPress={handleFile} />
+      {fileUri && <Image source={{ uri: fileUri }} style={styles.image} />}
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  image: {
+    width: 200,
+    height: 200,
+    marginTop: 10,
+    resizeMode: 'cover',
+  },
+});
+
+export default App;
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+import React, { useState } from 'react';
+import { View, Image, StyleSheet, Modal, TouchableOpacity, FlatList, Text } from 'react-native';
+
+const images = [
+  require('./assets/images/top1.png'),
+  require('./assets/images/top2.png'),
+  require('./assets/images/top3.png'),
+  require('./assets/images/top4.png'),
+  require('./assets/images/top5.png'),
+  // Add more images as needed
+];
+
+
+const App = () => {
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [currentImage, setCurrentImage] = useState(null);
+
+  const openModal = (image) => {
+    setCurrentImage(image);
+    setModalVisible(true);
+  };
+
+  const closeModal = () => {
+    setModalVisible(false);
+    setCurrentImage(null);
+  };
+
+  const renderItem = ({ item }) => (
+    <TouchableOpacity onPress={() => openModal(item)}>
+      <Image style={styles.imageThumbnail} source={item} />
+    </TouchableOpacity>
+  );
+
+  return (
+    <View style={styles.container}>
+      {/* Image grid using FlatList */}
+      <FlatList
+        data={images}
+        renderItem={renderItem}
+        keyExtractor={(item, index) => index.toString()}
+        numColumns={2} // Adjust for grid columns
+        contentContainerStyle={styles.grid}
+      />
+
+      {/* Fullscreen image in a Modal */}
+      <Modal
+        visible={isModalVisible}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={closeModal}
+      >
+        <View style={styles.modalContainer}>
+          {/* Fullscreen Image */}
+          <Image style={styles.fullScreenImage} source={currentImage} />
+
+          {/* Close Button */}
+          <TouchableOpacity style={styles.closeButton} onPress={closeModal}>
+            <Text style={styles.closeButtonText}>Close</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  grid: {
+    paddingVertical: 20,
+  },
+  imageThumbnail: {
+    width: 150,
+    height: 150,
+    margin: 10,
+    resizeMode: 'cover',
+  },
+  modalContainer: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  fullScreenImage: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'contain',
+  },
+  closeButton: {
+    position: 'absolute',
+    bottom: 40, // Position button at the bottom
+    backgroundColor: 'rgba(0, 0, 0, 0.6)', // Semi-transparent background
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+  },
+  closeButtonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+});
+
+export default App;
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+import React, { useState } from 'react';
+import { View, Button, Image, Text, PermissionsAndroid, StyleSheet } from 'react-native';
+import { launchImageLibrary } from 'react-native-image-picker';
+
+const App = () => {
+  const [fileUri, setFileUri] = useState(null);
+  const [fileName, setFileName] = useState(null);
+
+  const requestStoragePermission = async () => {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+        {
+          title: "Storage Permission",
+          message: "This app needs access to your storage to select images.",
+          buttonNeutral: "Ask Me Later",
+          buttonNegative: "Cancel",
+          buttonPositive: "OK"
+        }
+      );
+      return granted === PermissionsAndroid.RESULTS.GRANTED;
+    } catch (err) {
+      console.warn(err);
+      return false;
+    }
+  };
+
+  const handleSelectImage = async () => {
+    const hasPermission = await requestStoragePermission();
+    if (!hasPermission) return;
+
+    const options = {
+      mediaType: 'photo',
+      quality: 1,
+    };
+
+    launchImageLibrary(options, (response) => {
+      if (response.didCancel) {
+        console.log("User canceled image picker");
+      } else if (response.errorCode) {
+        console.error("Image Picker Error:", response.errorMessage);
+      } else {
+        const { uri, fileName } = response.assets[0];
+        setFileUri(uri);
+        setFileName(fileName);
+      }
+    });
+  };
+
+  return (
+    <View style={styles.container}>
+      <Button title="Select Image" onPress={handleSelectImage} />
+      {fileUri && (
+        <>
+          <Text style={styles.fileName}>File Name: {fileName}</Text>
+          <Image source={{ uri: fileUri }} style={styles.image} />
+        </>
+      )}
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  fileName: {
+    marginTop: 10,
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  image: {
+    width: 200,
+    height: 200,
+    marginTop: 10,
+    resizeMode: 'cover',
+  },
+});
+
+export default App;
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+
+import React, { useState } from 'react';
+import { View, Button, Image, Text, PermissionsAndroid, StyleSheet } from 'react-native';
+import { launchImageLibrary } from 'react-native-image-picker';
+
+const App = () => {
+  const [fileUri, setFileUri] = useState(null);
+  const [fileName, setFileName] = useState(null);
+
+  const requestStoragePermission = async () => {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+        {
+          title: "Storage Permission",
+          message: "This app needs access to your storage to select images.",
+          buttonNeutral: "Ask Me Later",
+          buttonNegative: "Cancel",
+          buttonPositive: "OK"
+        }
+      );
+      return granted === PermissionsAndroid.RESULTS.GRANTED;
+    } catch (err) {
+      console.warn(err);
+      return false;
+    }
+  };
+
+  const handleSelectImage = async () => {
+    const hasPermission = await requestStoragePermission();
+    if (!hasPermission) return;
+
+    const options = {
+      mediaType: 'photo',
+      quality: 1,
+    };
+
+    launchImageLibrary(options, (response) => {
+      if (response.didCancel) {
+        console.log("User canceled image picker");
+      } else if (response.errorCode) {
+        console.error("Image Picker Error:", response.errorMessage);
+      } else {
+        const { uri, fileName } = response.assets[0];
+        setFileUri(uri);
+        setFileName(fileName);
+      }
+    });
+  };
+
+  return (
+    <View style={styles.container}>
+      <Button title="Select Image" onPress={handleSelectImage} />
+      {fileUri && (
+        <>
+          <Text style={styles.fileName}>File Name: {fileName}</Text>
+          <Image source={{ uri: fileUri }} style={styles.image} />
+        </>
+      )}
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  fileName: {
+    marginTop: 10,
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  image: {
+    width: 200,
+    height: 200,
+    marginTop: 10,
+    resizeMode: 'cover',
+  },
+});
+
+export default App;
+
+///////////////////////////////////////////////////////////////////////////////////////////
+
+import React from 'react';
+import { Button, Image, View, StyleSheet } from 'react-native';
+import { launchImageLibrary } from 'react-native-image-picker';
+
+const App = () => {
+  const [fileUri, setFileUri] = React.useState(null);
+
+  const handleFile = () => {
+    const options = {
+      mediaType: 'photo', // 'photo' or 'video' based on what you want
+      includeBase64: true,
+    };
+
+    launchImageLibrary(options, (response) => {
+      if (response.didCancel) {
+        console.log("User canceled image picker");
+      } else if (response.errorCode) {
+        console.error("ImagePicker Error:", response.errorMessage);
+      } else {
+        const uri = response.assets[0].uri; // Get URI of selected file
+        setFileUri(uri);
+      }
+    });
+  };
+
+  return (
+    <View style={styles.container}>
+      <Button title="Select File" onPress={handleFile} />
+      {fileUri && <Image source={{ uri: fileUri }} style={styles.image} />}
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  image: {
+    width: 200,
+    height: 200,
+    marginTop: 10,
+    resizeMode: 'cover',
+  },
+});
+
+export default App;
+
+//////////////////////////////////////////////////////////////////////////////////////////
+
+import React , { useState } from 'react';
+import { Button, Image, View, StyleSheet, Text } from 'react-native';
+import { launchImageLibrary } from 'react-native-image-picker';
+
+const App = () => {
+  const [fileUri, setFileUri] = useState(null);
+  const [fileName, setFileName] = useState(null);
+
+  const handleSelectImage = () => {
+    const options = {
+      mediaType: 'photo', // 'photo' or 'video' based on what you want
+      includeBase64: true,
+    };
+
+    launchImageLibrary(options, (response) => {
+      if (response.didCancel) {
+        console.log("User canceled image picker");
+      } else if (response.errorCode) {
+        console.error("ImagePicker Error:", response.errorMessage);
+      } else {
+        const { uri, fileName } = response.assets[0];
+        setFileUri(uri);
+        setFileName(fileName);
+      }
+    });
+  };
+
+  return (
+    <View style={styles.container}>
+    <Button title="Select Image" onPress={handleSelectImage} />
+    {fileUri && (
+      <>
+        <Text style={styles.fileName}>File Name: {fileName}</Text>
+        <Image source={{ uri: fileUri }} style={styles.image} />
+      </>
+    )}
+  </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  image: {
+    width: 200,
+    height: 200,
+    marginTop: 10,
+    resizeMode: 'cover',
+  },
+  fileName: {
+    marginTop: 10,
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+});
+
+export default App;
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+
+import React, { useState } from 'react';
+import { Button, Image, View, StyleSheet, Text, TextInput } from 'react-native';
+import { launchImageLibrary } from 'react-native-image-picker';
+import io from 'socket.io-client';
+
+const socket = io('http://localhost:5001'); // Update with your server URL if necessary
+
+const App = () => {
+  const [fileUri, setFileUri] = useState(null);
+  const [fileName, setFileName] = useState(null);
+  const [base64Image, setBase64Image] = useState(null);
+  const [message, setMessage] = useState('');
+  const [user, setUser] = useState('User1'); // Placeholder user; in a real app, you'd use actual user data
+  const [avatar, setAvatar] = useState('https://example.com/avatar.png'); // Placeholder avatar URL
+
+  const handleSelectImage = () => {
+    const options = {
+      mediaType: 'photo',
+      includeBase64: true, // Include base64 for sending to the server
+    };
+
+    launchImageLibrary(options, (response) => {
+      if (response.didCancel) {
+        console.log("User canceled image picker");
+      } else if (response.errorCode) {
+        console.error("ImagePicker Error:", response.errorMessage);
+      } else if (response.assets && response.assets.length > 0) {
+        const { uri, fileName, base64, type } = response.assets[0];
+        setFileUri(uri);
+        setFileName(fileName);
+        
+        // Dynamically set MIME type based on image type
+        setBase64Image(`data:${type};base64,${base64}`);
+      }
+    });
+  };
+
+  // const handleSendMessage = () => {
+  //   if (message || base64Image) { // Only send if there's a message or image
+  //     const data = {
+  //       user,
+  //       avatar,
+  //       message,
+  //       image: base64Image, // Send the base64 image data with MIME type
+  //     };
+
+  //     socket.emit('sendMessage', data); // Emit data to server
+
+  //     // Clear inputs after sending
+  //     setMessage('');
+  //     setFileUri(null);
+  //     setFileName(null);
+  //     setBase64Image(null);
+  //   } else {
+  //     console.log('Message or image required to send');
+  //   }
+  // };
+
+  const handleSendMessage = () => {
+    if (message || base64Image) {
+      const data = {
+        user,
+        avatar,
+        message,
+        image: base64Image,
+      };
+  
+      console.log('Sending message:', data); // Log the data
+      socket.emit('sendMessage', data); // Emit data to server
+  
+      setMessage('');
+      setFileUri(null);
+      setFileName(null);
+      setBase64Image(null);
+    } else {
+      console.log('Message or image required to send');
+    }
+  };
+
+  return (
+    <View style={styles.container}>
+      <TextInput
+        style={styles.input}
+        placeholder="Enter your message"
+        value={message}
+        onChangeText={setMessage}
+      />
+      <Button title="Select Image" onPress={handleSelectImage} />
+      {fileUri && (
+        <>
+          <Text style={styles.fileName}>File Name: {fileName}</Text>
+          <Image source={{ uri: fileUri }} style={styles.image} />
+        </>
+      )}
+      <Button title="Send Message" onPress={handleSendMessage} />
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+  },
+  input: {
+    height: 40,
+    width: '100%',
+    borderColor: 'gray',
+    borderWidth: 1,
+    marginBottom: 10,
+    paddingHorizontal: 10,
+  },
+  image: {
+    width: 200,
+    height: 200,
+    marginTop: 10,
+    resizeMode: 'cover',
+  },
+  fileName: {
+    marginTop: 10,
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+});
+
+export default App;
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+import React, { useState } from 'react';
+import { Button, Image, View, StyleSheet, Text, TextInput, Alert } from 'react-native';
+import { launchImageLibrary } from 'react-native-image-picker';
+import io from 'socket.io-client';
+
+const socket = io('http://localhost:5001');
+
+const App = () => {
+  const [fileUri, setFileUri] = useState(null);
+  const [base64Image, setBase64Image] = useState(null);
+  const [message, setMessage] = useState('');
+  const [user, setUser] = useState('User1');
+  const [avatar, setAvatar] = useState('https://example.com/avatar.png');
+
+  const handleSelectImage = () => {
+    launchImageLibrary({ mediaType: 'photo', includeBase64: true }, (response) => {
+      if (response.didCancel) return;
+      if (response.errorCode) return Alert.alert("Image Picker Error", response.errorMessage);
+      const asset = response.assets && response.assets[0];
+      if (asset) {
+        const { uri, base64, type } = asset;
+        if (!type.startsWith('image')) {
+          Alert.alert('Only images allowed');
+          return;
+        }
+        setFileUri(uri);
+        setBase64Image(`data:${type};base64,${base64}`);
+      }
+    });
+  };
+
+  const handleSendMessage = () => {
+    if (!message && !base64Image) {
+      Alert.alert('Message or image required');
+      return;
+    }
+    socket.emit('sendMessage', { user, avatar, message, image: base64Image });
+    setMessage('');
+    setFileUri(null);
+    setBase64Image(null);
+  };
+
+  return (
+    <View style={styles.container}>
+      <TextInput style={styles.input} placeholder="Enter your message" value={message} onChangeText={setMessage} />
+      <Button title="Select Image" onPress={handleSelectImage} />
+      {fileUri && (
+        <>
+          <Text>Selected Image:</Text>
+          <Image source={{ uri: fileUri }} style={styles.image} />
+        </>
+      )}
+      <Button title="Send Message" onPress={handleSendMessage} />
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: { flex: 1, justifyContent: 'center', paddingHorizontal: 20 },
+  input: { height: 40, width: '100%', borderColor: 'gray', borderWidth: 1, marginBottom: 10, paddingHorizontal: 10 },
+  image: { width: 200, height: 200, marginTop: 10, resizeMode: 'cover' },
+});
+
+export default App;
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+
+import React, { useState, useEffect } from 'react';
+import { Button, Image, View, StyleSheet, Text, TextInput, Alert } from 'react-native';
+import { launchImageLibrary } from 'react-native-image-picker';
+import io from 'socket.io-client';
+
+const App = () => {
+  const [fileUri, setFileUri] = useState(null);
+  const [base64Image, setBase64Image] = useState(null);
+  const [message, setMessage] = useState('');
+  const [user, setUser] = useState('User1');
+  const [avatar, setAvatar] = useState('https://example.com/avatar.png');
+  const [socket, setSocket] = useState(null);
+
+  useEffect(() => {
+    // Establish socket connection
+    const newSocket = io('http://localhost:5001');
+    setSocket(newSocket);
+
+    // Log connection event
+    newSocket.on('connect', () => {
+      console.log('Connected to the server with socket ID:', newSocket.id);
+    });
+
+    // Handle any messages or events you want to listen to here
+    newSocket.on('disconnect', () => {
+      console.log('Disconnected from the server');
+    });
+
+    // Cleanup connection when component unmounts
+    return () => {
+      newSocket.disconnect();
+    };
+  }, []);
+
+  const handleSelectImage = () => {
+    launchImageLibrary({ mediaType: 'photo', includeBase64: true }, (response) => {
+      if (response.didCancel) return;
+      if (response.errorCode) return Alert.alert("Image Picker Error", response.errorMessage);
+      const asset = response.assets && response.assets[0];
+      if (asset) {
+        const { uri, base64, type } = asset;
+        if (!type.startsWith('image')) {
+          Alert.alert('Only images allowed');
+          return;
+        }
+        setFileUri(uri);
+        setBase64Image(`data:${type};base64,${base64}`);
+      }
+    });
+  };
+
+  const handleSendMessage = () => {
+    if (!message && !base64Image) {
+      Alert.alert('Message or image required');
+      return;
+    }
+    if (socket) {
+      socket.emit('sendMessage', { user, avatar, message, image: base64Image });
+      console.log('Message sent:', { user, avatar, message, image: base64Image });
+      setMessage('');
+      setFileUri(null);
+      setBase64Image(null);
+    } else {
+      Alert.alert('Socket not connected');
+    }
+  };
+
+  return (
+    <View style={styles.container}>
+      <TextInput style={styles.input} placeholder="Enter your message" value={message} onChangeText={setMessage} />
+      <Button title="Select Image" onPress={handleSelectImage} />
+      {fileUri && (
+        <>
+          <Text>Selected Image:</Text>
+          <Image source={{ uri: fileUri }} style={styles.image} />
+        </>
+      )}
+      <Button title="Send Message" onPress={handleSendMessage} />
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: { flex: 1, justifyContent: 'center', paddingHorizontal: 20 },
+  input: { height: 40, width: '100%', borderColor: 'gray', borderWidth: 1, marginBottom: 10, paddingHorizontal: 10 },
+  image: { width: 200, height: 200, marginTop: 10, resizeMode: 'cover' },
+});
+
+export default App;
+ 
+
+ ///////////////////////////////////////////////////////////////////
+
+ import React, { useState, useEffect } from 'react';
+import { Button, Image, View, StyleSheet, Text, TextInput, Alert } from 'react-native';
+import { launchImageLibrary } from 'react-native-image-picker';
+import io from 'socket.io-client';
+
+const App = () => {
+  const [fileUri, setFileUri] = useState(null);
+  const [base64Image, setBase64Image] = useState(null);
+  const [message, setMessage] = useState('');
+  const [user, setUser] = useState('User1');
+  const [avatar, setAvatar] = useState('https://example.com/avatar.png');
+  const [socket, setSocket] = useState(null);
+
+  useEffect(() => {
+    // Establish socket connection
+    const newSocket = io('http://localhost:5001');
+    setSocket(newSocket);
+
+    // Log connection event
+    newSocket.on('connect', () => {
+      console.log('Connected to the server with socket ID:', newSocket.id);
+    });
+
+    // Handle any messages or events you want to listen to here
+    newSocket.on('disconnect', () => {
+      console.log('Disconnected from the server');
+    });
+
+    // Cleanup connection when component unmounts
+    return () => {
+      newSocket.disconnect();
+    };
+  }, []);
+
+  const handleSelectImage = () => {
+    launchImageLibrary({ mediaType: 'photo', includeBase64: true }, (response) => {
+      if (response.didCancel) return;
+      if (response.errorCode) return Alert.alert("Image Picker Error", response.errorMessage);
+      const asset = response.assets && response.assets[0];
+      if (asset) {
+        const { uri, base64, type } = asset;
+        if (!type.startsWith('image')) {
+          Alert.alert('Only images allowed');
+          return;
+        }
+        setFileUri(uri);
+        setBase64Image(`data:${type};base64,${base64}`);
+      }
+    });
+  };
+
+  const handleSendMessage = () => {
+    if (!message && !base64Image) {
+      Alert.alert('Message or image required');
+      return;
+    }
+    if (socket) {
+      socket.emit('sendMessage', { user, avatar, message, image: base64Image });
+      console.log('Message sent:', { user, avatar, message, image: base64Image });
+      setMessage('');
+      setFileUri(null);
+      setBase64Image(null);
+    } else {
+      Alert.alert('Socket not connected');
+    }
+  };
+
+  return (
+    <View style={styles.container}>
+      <TextInput style={styles.input} placeholder="Enter your message" value={message} onChangeText={setMessage} />
+      <Button title="Select Image" onPress={handleSelectImage} />
+      {fileUri && (
+        <>
+          <Text>Selected Image:</Text>
+          <Image source={{ uri: fileUri }} style={styles.image} />
+        </>
+      )}
+      <Button title="Send Message" onPress={handleSendMessage} />
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: { flex: 1, justifyContent: 'center', paddingHorizontal: 20 },
+  input: { height: 40, width: '100%', borderColor: 'gray', borderWidth: 1, marginBottom: 10, paddingHorizontal: 10 },
+  image: { width: 200, height: 200, marginTop: 10, resizeMode: 'cover' },
+});
+
+export default App;
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+import React, { useEffect, useState } from 'react';
+import { View, Text, TextInput, Button, FlatList, StyleSheet } from 'react-native';
+import io from 'socket.io-client';
+
+// Connect to the Socket.IO server
+const socket = io("http://10.0.2.2:4000"); // Use your server IP for a real device
+
+const App = () => {
+    const [message, setMessage] = useState('');
+    const [messages, setMessages] = useState([]);
+
+    useEffect(() => {
+        // Listen for incoming messages
+        socket.on('message', (msg) => {
+            setMessages((prevMessages) => [...prevMessages, msg]);
+        });
+
+        // Clean up on component unmount
+        return () => socket.off('message');
+    }, []);
+
+    // Handle message send
+    const sendMessage = () => {
+        if (message.trim()) {
+            socket.emit('message', message);
+            setMessage(''); // Clear input
+        }
+    };
+
+    return (
+        <View style={styles.container}>
+            <Text style={styles.title}>Socket.IO Chat</Text>
+            <FlatList
+                data={messages}
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={({ item }) => (
+                    <View style={styles.message}>
+                        <Text>{item}</Text>
+                    </View>
+                )}
+            />
+            <TextInput
+                style={styles.input}
+                placeholder="Type a message"
+                value={message}
+                onChangeText={setMessage}
+            />
+            <Button title="Send" onPress={sendMessage} />
+        </View>
+    );
+};
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        padding: 20,
+        backgroundColor: '#f5f5f5'
+    },
+    title: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        marginBottom: 20,
+        textAlign: 'center'
+    },
+    message: {
+        padding: 10,
+        borderBottomWidth: 1,
+        borderBottomColor: '#ccc'
+    },
+    input: {
+        height: 40,
+        borderColor: 'gray',
+        borderWidth: 1,
+        marginBottom: 10,
+        paddingHorizontal: 10
+    }
+});
+
+export default App;
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+import React, { useState, useEffect } from 'react';
+import { Button, Image, View, StyleSheet, Text, TextInput, Alert } from 'react-native';
+import { launchImageLibrary } from 'react-native-image-picker';
+import io from 'socket.io-client';
+
+const App = () => {
+  const [fileUri, setFileUri] = useState(null);
+  const [base64Image, setBase64Image] = useState(null);
+  const [message, setMessage] = useState('');
+  const [user, setUser] = useState('User1');
+  const [avatar, setAvatar] = useState('https://example.com/avatar.png');
+  const [socket, setSocket] = useState(null);
+
+  useEffect(() => {
+    // Establish socket connection
+    const newSocket =io("http://10.0.2.2:5001");
+    setSocket(newSocket);
+
+    // Log connection event
+    newSocket.on('connect', () => {
+      console.log('Connected to the server with socket ID:', newSocket.id);
+    });
+
+    // Handle any messages or events you want to listen to here
+    newSocket.on('disconnect', () => {
+      console.log('Disconnected from the server');
+    });
+
+    // Cleanup connection when component unmounts
+    return () => {
+      newSocket.disconnect();
+    };
+  }, []);
+
+  const handleSelectImage = () => {
+    launchImageLibrary({ mediaType: 'photo', includeBase64: true }, (response) => {
+      if (response.didCancel) return;
+      if (response.errorCode) return Alert.alert("Image Picker Error", response.errorMessage);
+      const asset = response.assets && response.assets[0];
+      if (asset) {
+        const { uri, base64, type } = asset;
+        if (!type.startsWith('image')) {
+          Alert.alert('Only images allowed');
+          return;
+        }
+        setFileUri(uri);
+        setBase64Image(`data:${type};base64,${base64}`);
+      }
+    });
+  };
+
+  const handleSendMessage = () => {
+    if (!message && !base64Image) {
+      Alert.alert('Message or image required');
+      return;
+    }
+    if (socket) {
+      socket.emit('sendMessage', { user, avatar, message, image: base64Image });
+      console.log('Message sent:', { user, avatar, message, image: base64Image });
+      setMessage('');
+      setFileUri(null);
+      setBase64Image(null);
+    } else {
+      Alert.alert('Socket not connected');
+    }
+  };
+
+  return (
+    <View style={styles.container}>
+      <TextInput style={styles.input} placeholder="Enter your message" value={message} onChangeText={setMessage} />
+      <Button title="Select Image" onPress={handleSelectImage} />
+      {fileUri && (
+        <>
+          <Text>Selected Image:</Text>
+          <Image source={{ uri: fileUri }} style={styles.image} />
+        </>
+      )}
+      <Button title="Send Message" onPress={handleSendMessage} />
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: { flex: 1, justifyContent: 'center', paddingHorizontal: 20 },
+  input: { height: 40, width: '100%', borderColor: 'gray', borderWidth: 1, marginBottom: 10, paddingHorizontal: 10 },
+  image: { width: 200, height: 200, marginTop: 10, resizeMode: 'cover' },
+});
+
+export default App;
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+
+ i+= 0.01;
+  
+        // Stop drawing when theta exceeds the target value
+        if (i>2*Math.PI) {
+          clearInterval(interval);  // Stop the animation
+          
+          for(let t=0;t<=i;t+=0.01)
+            {
+              const x1=x0*Math.cos(t)+y0*Math.sin(t);
+              const y1=-x0*Math.sin(t)+y0*Math.cos(t);
+        
+              const xxx1=(x0+50)*Math.cos(t)+(y0+0)*Math.sin(t);
+              const yyy1=-(x0+50)*Math.sin(t)+(y0+0)*Math.cos(t);
+        
+              const x2=x1*Math.cos(t)+y1*Math.sin(t);
+              const y2=-x1*Math.sin(t)+y1*Math.cos(t);
+              ctx.lineTo(centerX/2+x2+xxx1,centerY+y2+yyy1)
+              ctx.beginPath();
+              ctx.moveTo(centerX/2+x2+xxx1,centerY+y2+yyy1);
+              ctx.lineTo(centerX/2+x2+xxx1+1,centerY+y2+yyy1+1);
+              ctx.stroke();
+            
+            }
+          
+          
+          ctx.closePath();  // Close the path once the drawing is done
+
+        }
+      }, 10);  // Update every 10 milliseconds (adjust as needed for speed)
+    }
+
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  import React from 'react';
+import { View } from 'react-native';
+import Canvas from 'react-native-canvas';
+
+const Dim10 = () => {
+  const handleCanvas = (canvas) => {
+    if (canvas) {
+      canvas.width = 400;
+      canvas.height = 400;
+      const ctx = canvas.getContext('2d');
+
+     drawCoordinateSystem(ctx, canvas.width, canvas.height);
+     
+      let i=0;
+
+      const interval = setInterval(() => {
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      i+= 0.01;
+
+
+      let [x11,y11]=rot(50,0,i);
+      let [x22,y22]=rot(100,0,i);
+      let [x33,y33]=rot(x11,y11,i);
+
+
+      drawx(ctx, canvas.width, canvas.height, x22, y22, x33, y33);
+  
+        if (i>2*Math.PI) {
+          clearInterval(interval); 
+
+        }
+      }, 15); 
+
+    }
+  };
+
+
+
+  const drawx = (ctx, width, height, x22, y22, x33, y33) => {
+    const x0 = width / 2;
+    const y0 = height / 2;
+
+    // Draw the first circle
+    ctx.beginPath();
+    ctx.arc(x0, y0, 50, 0, Math.PI * 2);
+    ctx.strokeStyle = 'blue';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+    // Draw the second circle
+    ctx.beginPath();
+    ctx.arc(x0 + x22, y0 + y22, 50, 0, Math.PI * 2);
+    ctx.stroke();
+
+    // Draw the line
+    ctx.beginPath();
+    ctx.moveTo(x0, y0);
+    ctx.lineTo(x0 + x22, y0 + y22);
+    ctx.lineTo(x0 + x22 + x33, y0 + y22 + y33);
+    ctx.strokeStyle = 'green';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+};
+
+  
+
+  const drawCoordinateSystem = (ctx, width, height) => {
+    const centerX = width / 2;
+    const centerY = height / 2;
+
+    // Draw vertical line (Y-axis)
+    ctx.beginPath();
+    ctx.moveTo(centerX,0);
+    ctx.lineTo(centerX,height);
+    ctx.strokeStyle = 'red';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+    // Draw horizontal line (X-axis)
+    ctx.beginPath();
+    ctx.moveTo(0,centerY);
+    ctx.lineTo(width,centerY);
+    ctx.stroke();
+  };
+
+ 
+
+  const rot=(x,y,i)=>{
+     const xx=x*Math.cos(i)+y*Math.sin(i);
+     const yy=-x*Math.sin(i)+y*Math.cos(i);
+     return [xx,yy];
+  }
+
+  return (
+    <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1 }}>
+      <Canvas ref={handleCanvas} style={{ borderWidth: 1, borderColor: 'black' }} />
+    </View>
+  );
+};
+
+export default Dim10;
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+import React, { useEffect } from 'react';
+import { Canvas, Circle, Line, useValue } from '@shopify/react-native-skia';
+import { View } from 'react-native';
+
+const Dim13 = () => {
+  const angle = useValue(0); // Use `useValue` instead of `useClockValue`
+
+  // Animation loop using `requestAnimationFrame`
+  useEffect(() => {
+    const animate = () => {
+      angle.current += 0.01; // Update angle value
+      requestAnimationFrame(animate);
+    };
+    animate(); // Start animation
+  }, []);
+
+  const centerX = 200;
+  const centerY = 200;
+  const radius = 50;
+
+  const rotatePoint = ({ x, y }, angle) => {
+    const cosA = Math.cos(angle);
+    const sinA = Math.sin(angle);
+    return {
+      x: x * cosA - y * sinA,
+      y: x * sinA + y * cosA,
+    };
+  };
+
+  const point1 = rotatePoint({ x: 50, y: 0 }, angle.current);
+  const point2 = rotatePoint({ x: 100, y: 0 }, angle.current);
+  const point3 = rotatePoint(point1, angle.current);
+
+  return (
+    <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1 }}>
+      <Canvas style={{ width: 400, height: 400 }}>
+        <Line
+          p1={{ x: centerX, y: 0 }}
+          p2={{ x: centerX, y: 400 }}
+          color="red"
+          strokeWidth={1}
+        />
+        <Line
+          p1={{ x: 0, y: centerY }}
+          p2={{ x: 400, y: centerY }}
+          color="red"
+          strokeWidth={1}
+        />
+        <Circle cx={centerX} cy={centerY} r={radius} color="blue" />
+        <Circle cx={centerX + point2.x} cy={centerY + point2.y} r={radius} color="black" />
+        <Line
+          p1={{ x: centerX, y: centerY }}
+          p2={{ x: centerX + point2.x, y: centerY + point2.y }}
+          color="green"
+          strokeWidth={1}
+        />
+        <Line
+          p1={{ x: centerX + point2.x, y: centerY + point2.y }}
+          p2={{ x: centerX + point2.x + point3.x, y: centerY + point2.y + point3.y }}
+          color="green"
+          strokeWidth={1}
+        />
+      </Canvas>
+    </View>
+  );
+};
+
+export default Dim13;
+
+////////////////////////////////////////////////////////////////////////////////////////
+
+import React, { useEffect, useState } from 'react';
+import { Canvas, Circle, Line, Skia, useValue, useClockValue, useDerivedValue } from '@shopify/react-native-skia';
+import { View } from 'react-native';
+
+const Dim14 = () => {
+  const canvasWidth = 400;
+  const canvasHeight = 400;
+  const centerX = canvasWidth / 2;
+  const centerY = canvasHeight / 2;
+  
+  const angle = useClockValue(); // Clock value to track animation time
+  const radius = 50;
+
+  // Derived values for rotating points
+  const point1 = useDerivedValue(() => rotatePoint({ x: 50, y: 0 }, angle.current));
+  const point2 = useDerivedValue(() => rotatePoint({ x: 100, y: 0 }, angle.current));
+  const point3 = useDerivedValue(() => rotatePoint(point1.current, angle.current));
+
+  const rotatePoint = ({ x, y }, angle) => {
+    const cosA = Math.cos(angle);
+    const sinA = Math.sin(angle);
+    return {
+      x: x * cosA - y * sinA,
+      y: x * sinA + y * cosA,
+    };
+  };
+
+  return (
+    <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1 }}>
+      <Canvas style={{ width: canvasWidth, height: canvasHeight }}>
+        {/* Draw Coordinate System */}
+        <Line
+          p1={{ x: centerX, y: 0 }}
+          p2={{ x: centerX, y: canvasHeight }}
+          color="red"
+          strokeWidth={1}
+        />
+        <Line
+          p1={{ x: 0, y: centerY }}
+          p2={{ x: canvasWidth, y: centerY }}
+          color="red"
+          strokeWidth={1}
+        />
+
+        {/* Central Circle */}
+        <Circle cx={centerX} cy={centerY} r={radius} color="blue" />
+
+        {/* Second Circle following point2 */}
+        <Circle cx={centerX + point2.current.x} cy={centerY + point2.current.y} r={radius} color="black" />
+
+        {/* Line connecting points */}
+        <Line
+          p1={{ x: centerX, y: centerY }}
+          p2={{ x: centerX + point2.current.x, y: centerY + point2.current.y }}
+          color="green"
+          strokeWidth={1}
+        />
+        <Line
+          p1={{ x: centerX + point2.current.x, y: centerY + point2.current.y }}
+          p2={{ x: centerX + point2.current.x + point3.current.x, y: centerY + point2.current.y + point3.current.y }}
+          color="green"
+          strokeWidth={1}
+        />
+      </Canvas>
+    </View>
+  );
+};
+
+export default Dim14;
+
+////////////////////////////////////////////////////////////////////////
+
+https://shopify.github.io/react-native-skia/docs/getting-started/hello-world
+
+////////////////////////////////////////////////////////////////////////
+
+// import React from 'react';
+// import { SafeAreaView } from 'react-native';
+// import Dim14 from './graphics/Dim14';
+
+// const App = () => {
+//   return (
+//     <SafeAreaView style={{ flex: 1 }}>
+//       <Dim14 />
+//     </SafeAreaView>
+//   );
+// };
+
+// export default App;
+
+
+// import React from 'react';
+// import { Canvas, Circle } from '@shopify/react-native-skia';
+
+// const App = () => (
+//   <Canvas style={{ width: 100, height: 100 }}>
+//     <Circle cx={50} cy={50} r={25} color="blue" />
+//   </Canvas>
+// );
+
+// export default App;
+
+import React from 'react';
+import { SafeAreaView } from 'react-native';
+import Top21 from './skia/Top21';
+// import Dim17 from './graphics/Dim17';
+
+const App = () => {
+  return (
+    <SafeAreaView style={{ flex: 1 }}>
+      <Top21 />
+    </SafeAreaView>
+  );
+};
+
+export default App;
+
+////////////////////////////////////////////////////////////////////////
+
+npx react-native start --reset-cache
